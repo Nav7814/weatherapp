@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #0d1117;
+      color: #e6edf3;
+      margin: 0;
+      padding: 50px;
+    }
+    .card {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      border: 1px solid #30363d;
+    }
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #58a6ff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1f6feb;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌦️ Real-Time Weather App</h1>
+  <div class="card">
+    <input type="text" id="city" placeholder="Enter city name" />
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const city = document.getElementById("city").value;
+      const apiKey = "e2ba8bbff5a4db7f0fff3a54a75ff78c"; // Replace with your OpenWeatherMap API key
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === 200) {
+          document.getElementById("result").innerHTML = `
+            <h2>${data.name}, ${data.sys.country}</h2>
+            <p>🌡️ Temperature: ${data.main.temp} °C</p>
+            <p>☁️ Condition: ${data.weather[0].description}</p>
+            <p>💨 Wind Speed: ${data.wind.speed} m/s</p>
+          `;
+        } else {
+          document.getElementById("result").innerHTML = `<p>❌ City not found!</p>`;
+        }
+      } catch (error) {
+        document.getElementById("result").innerHTML = `<p>⚠️ Error fetching data</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
